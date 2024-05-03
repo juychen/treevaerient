@@ -36,6 +36,25 @@ def run_experiment(configs):
 	else:
 		print("No GPU available")
 
+	available_gpus = []
+	gpu_count = torch.cuda.device_count()
+	for gpu_id in range(gpu_count):
+		torch.cuda.set_device(gpu_id)
+		if torch.cuda.is_available():
+			try:
+				torch.tensor([0], device=gpu_id)  # Try allocating a tensor on the GPU
+				available_gpus.append(gpu_id)
+			except RuntimeError as e:
+				# GPU is already in use by another process
+				print(f"Skipping GPU {gpu_id}: {str(e)}")
+	if len(available_gpus) == 0:
+		device = torch.device("cpu")
+		print("No GPUs available. Using CPU.")
+	else:# (len(available_gpus) < int(config["gpus"])) or not(int(config["cuda_device"]) in available_gpus):
+		os.environ['CUDA_VISIBLE_DEVICES'] = str(available_gpus[0])
+		print(f"No enough GPUs, using 1 GPU {available_gpus[0]}.")
+
+
 	# Set paths
 	project_dir = Path(__file__).absolute().parent
 	timestr = time.strftime("%Y%m%d-%H%M%S")

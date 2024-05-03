@@ -7,7 +7,9 @@ import distutils
 
 from train.train import run_experiment
 from utils.utils import prepare_config
+import os
 
+#os.environ['CUDA_LAUNCH_BLOCKING']="1"
 
 def main():
     project_dir = Path(__file__).absolute().parent

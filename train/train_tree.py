@@ -77,6 +77,7 @@ def run_tree(trainset, trainset_eval, testset, device, configs):
 		lr_scheduler.step()
 		alpha_scheduler.on_epoch_end(epoch)
 		_ = gc.collect()
+		torch.cuda.empty_cache()
 
 	################################# GROWING THE TREE #################################
 
@@ -109,7 +110,7 @@ def run_tree(trainset, trainset_eval, testset, device, configs):
 					lr_scheduler.step()
 					alpha_scheduler.on_epoch_end(epoch)
 					_ = gc.collect()
-
+					torch.cuda.empty_cache()
 		# extract information of leaves
 		node_leaves_train = predict(gen_train_eval, model, device, 'node_leaves')
 		node_leaves_test = predict(gen_test, model, device, 'node_leaves')
@@ -156,7 +157,7 @@ def run_tree(trainset, trainset_eval, testset, device, configs):
 			lr_scheduler.step()
 			alpha_scheduler.on_epoch_end(epoch)
 			_ = gc.collect()
-
+			torch.cuda.empty_cache()
 		# attach smalltree to full tree by assigning decisions and adding new children nodes to full tree
 		model.attach_smalltree(node, small_model)
 
@@ -222,7 +223,7 @@ def run_tree(trainset, trainset_eval, testset, device, configs):
 			model.decoders = decoders
 			model.depth = model.compute_depth()
 	_ = gc.collect()
-
+	torch.cuda.empty_cache()
 	################################# FULL MODEL FINETUNING #################################
 
 
@@ -241,7 +242,7 @@ def run_tree(trainset, trainset_eval, testset, device, configs):
 		lr_scheduler.step()
 		alpha_scheduler.on_epoch_end(epoch)
 		_ = gc.collect()
-
+		torch.cuda.empty_cache()
 	return model
 
 

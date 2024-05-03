@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.o*
+*.e*
+*.pbs
 
 omniglot/* 
 out/*
@@ -149,3 +152,5 @@ dataset/*
 data/*
 logs/*
 datasets/*
+treevae.e91889
+.vscode/settings.json

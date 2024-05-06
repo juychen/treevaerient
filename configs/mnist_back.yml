@@ -22,7 +22,7 @@ training:
   mlp_layers: [128, 128, 128, 128, 128, 128] # A list of hidden units number for the MLP transformations for each depth of the tree from bottom to root
   initial_depth: 1 # The initial depth of the tree (root has depth 0 and a root with two leaves has depth 1)
   activation: "sigmoid" # The name of the activation function for the reconstruction loss [sigmoid, mse]
-  encoder: 'mlp' # Type of encoder/decoder used
+  encoder: 'cnn1' # Type of encoder/decoder used
   grow: True # Whether to grow the tree
   prune: True # Whether to prune the tree of empty leaves
   num_clusters_tree: 10 # The maximum number of leaves of the final tree

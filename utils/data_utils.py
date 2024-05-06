@@ -304,7 +304,8 @@ def get_data(configs):
 		matrix_ad_dp = matrix_ad_dp.T
 		matrix_ad_dp[np.isnan(matrix_ad_dp)] = 0
 		from sklearn.preprocessing import StandardScaler
-		scaler = StandardScaler()
+		from sklearn.preprocessing import Normalizer
+		scaler = Normalizer()
 		matrix_ad_dp = scaler.fit_transform(matrix_ad_dp)
 		from sklearn.model_selection import train_test_split
 		X_train, X_test, y_train, y_test = train_test_split(matrix_ad_dp, encoded_labels, test_size=0.2, random_state=configs['globals']['seed'])

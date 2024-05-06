@@ -95,7 +95,7 @@ def run_experiment(configs):
 	# Save model
 	if configs['globals']['save_model']:
 		print("\nSaving weights at ", experiment_path)
-		torch.save(model.state_dict(), experiment_path +'/model_weights.pt')
+		torch.save(model.state_dict(), experiment_path /'model_weights.pt')
 	
 	# torch.save(model.state_dict(), 'model_weights.pt')
 

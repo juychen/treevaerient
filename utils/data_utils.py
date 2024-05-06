@@ -275,6 +275,54 @@ def get_data(configs):
 		trainset_eval.dataset.targets = torch.zeros(trainset.dataset.attr.shape[0], dtype=torch.int8)
 		testset.dataset.targets = torch.zeros(trainset.dataset.attr.shape[0], dtype=torch.int8)
 
+	elif data_name == 'waldvarient':
+		import pandas as pd
+		import torch 
+		import numpy as np
+		from scipy.io import mmread		
+		from sklearn.preprocessing import LabelEncoder
+		print("waldvarient")
+		matrix_dp = mmread('/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/passed_dp.mtx')
+		matrix_ad = mmread('/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/passed_ad.mtx')
+		# Read the cell label
+		matrix_dp.shape
+		df_cell_label = pd.read_csv('/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/cell_label.csv')
+		var_name = pd.read_csv('/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/passed_variant_names.txt',header=None)
+		var_name
+		label_encoder = LabelEncoder()
+		# Fit the label encoder on the labels
+		label_encoder.fit(df_cell_label["true_label"].values)
+		# Transform the labels into encoded values
+		encoded_labels = label_encoder.transform(df_cell_label["true_label"].values)
+
+		# Print the encoded labels
+
+		encoded_labels
+		df_cell_label.head()
+		set(df_cell_label["true_label"].values)
+		matrix_ad_dp = matrix_ad/matrix_dp
+		matrix_ad_dp = matrix_ad_dp.T
+		matrix_ad_dp[np.isnan(matrix_ad_dp)] = 0
+		from sklearn.preprocessing import StandardScaler
+		scaler = StandardScaler()
+		matrix_ad_dp = scaler.fit_transform(matrix_ad_dp)
+		from sklearn.model_selection import train_test_split
+		X_train, X_test, y_train, y_test = train_test_split(matrix_ad_dp, encoded_labels, test_size=0.2, random_state=configs['globals']['seed'])
+		x_train = torch.from_numpy(X_train.astype(np.float32))
+		x_test = torch.from_numpy(X_test.astype(np.float32))
+		y_train = torch.from_numpy(y_train.astype(np.float32))
+		y_test = torch.from_numpy(y_test.astype(np.float32))
+
+		# get only num_clusters digits
+		indx_train, indx_test = select_subset(y_train, y_test, n_classes)
+		trainset = Subset(TensorDataset(x_train, y_train), indx_train)
+		trainset_eval = Subset(TensorDataset(x_train, y_train), indx_train)
+		testset = Subset(TensorDataset(x_test, y_test), indx_test)
+		trainset.dataset.targets = torch.tensor(trainset.dataset.tensors[1])
+		trainset_eval.dataset.targets = torch.tensor(trainset_eval.dataset.tensors[1])
+		testset.dataset.targets = torch.tensor(testset.dataset.tensors[1])
+
+
 	else:
 		raise NotImplementedError('This dataset is not supported!')
 	

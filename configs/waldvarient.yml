@@ -1,8 +1,8 @@
-run_name: 'mnist' # name of the run
+run_name: 'waldvarient' # name of the run
 
 data:
-  data_name: 'mnist' # name of the dataset
-  num_clusters_data: 10 # number of true clusters in the data (if known), this is used only for evaluation purposes
+  data_name: 'waldvarient' # name of the dataset
+  num_clusters_data: 2 # number of true clusters in the data (if known), this is used only for evaluation purposes
 
 training:
   num_epochs: 150 # number of epochs to train the initial tree
@@ -17,15 +17,15 @@ training:
   decay_kl: 0.001 # KL-annealing weight increase per epoch (capped at 1)
   kl_start: 0.0 # KL-annealing weight initialization
 
-  inp_shape: 784 # The total dimensions of the input data (if rgb images of 32x32 then 32x32x3)
-  latent_dim: [8, 8, 8, 8, 8, 8] # A list of latent dimensions for each depth of the tree from the bottom to the root, last value is the dimensionality of the root node
-  mlp_layers: [128, 128, 128, 128, 128, 128] # A list of hidden units number for the MLP transformations for each depth of the tree from bottom to root
+  inp_shape: 3972 # The total dimensions of the input data (if rgb images of 32x32 then 32x32x3)
+  latent_dim: [16, 16] # A list of latent dimensions for each depth of the tree from the bottom to the root, last value is the dimensionality of the root node
+  mlp_layers: [128, 128] # A list of hidden units number for the MLP transformations for each depth of the tree from bottom to root
   initial_depth: 1 # The initial depth of the tree (root has depth 0 and a root with two leaves has depth 1)
   activation: "sigmoid" # The name of the activation function for the reconstruction loss [sigmoid, mse]
   encoder: 'mlp' # Type of encoder/decoder used
   grow: True # Whether to grow the tree
   prune: True # Whether to prune the tree of empty leaves
-  num_clusters_tree: 10 # The maximum number of leaves of the final tree
+  num_clusters_tree: 4 # The maximum number of leaves of the final tree
   compute_ll: False # Whether to compute the log-likelihood estimation at the end of the training (it might take some time)
   augment: False # Whether to use contrastive learning through augmentation
   augmentation_method: 'simple' # The type of augmentation method used if augment is True

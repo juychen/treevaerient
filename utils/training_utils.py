@@ -90,7 +90,7 @@ def train_one_epoch(train_loader, model, optimizer, metrics_calc, epoch_idx, dev
                             (1 - torch.mean(y_pred.float()) if outputs['p_c_z'].shape[1] <= 2 else torch.tensor(0.,
                                                                                                                 device=device)),
                             labels, y_pred)
-
+        
     if train_small_tree:
         model.return_bottomup[0] = False
         model.return_x[0] = False
@@ -105,6 +105,7 @@ def train_one_epoch(train_loader, model, optimizer, metrics_calc, epoch_idx, dev
     print(prints)
     metrics_calc.reset()
     _ = gc.collect()
+    torch.cuda.empty_cache()
     return
 
 
@@ -168,6 +169,7 @@ def validate_one_epoch(test_loader, model, metrics_calc, epoch_idx, device, test
     print(prints)
     metrics_calc.reset()
     _ = gc.collect()
+    torch.cuda.empty_cache()
     return
 
 

@@ -48,7 +48,7 @@ def run_tree(trainset, trainset_eval, testset, device, configs):
 	gen_train_eval = get_gen(trainset_eval, configs, validation=True, shuffle=False)
 	gen_test = get_gen(testset, configs, validation=True, shuffle=False)
 	_ = gc.collect()
-
+	torch.cuda.empty_cache()
 	# Define model & optimizer
 	model = TreeVAE(**configs['training'])
 	model.to(device)
@@ -78,7 +78,6 @@ def run_tree(trainset, trainset_eval, testset, device, configs):
 		alpha_scheduler.on_epoch_end(epoch)
 		_ = gc.collect()
 		torch.cuda.empty_cache()
-
 	################################# GROWING THE TREE #################################
 
 	# Start the growing loop of the tree
@@ -110,8 +109,7 @@ def run_tree(trainset, trainset_eval, testset, device, configs):
 					lr_scheduler.step()
 					alpha_scheduler.on_epoch_end(epoch)
 					_ = gc.collect()
-					torch.cuda.empty_cache()
-		# extract information of leaves
+					torch.cuda.empty_cache()		# extract information of leaves
 		node_leaves_train = predict(gen_train_eval, model, device, 'node_leaves')
 		node_leaves_test = predict(gen_test, model, device, 'node_leaves')
 
@@ -157,8 +155,7 @@ def run_tree(trainset, trainset_eval, testset, device, configs):
 			lr_scheduler.step()
 			alpha_scheduler.on_epoch_end(epoch)
 			_ = gc.collect()
-			torch.cuda.empty_cache()
-		# attach smalltree to full tree by assigning decisions and adding new children nodes to full tree
+			torch.cuda.empty_cache()		# attach smalltree to full tree by assigning decisions and adding new children nodes to full tree
 		model.attach_smalltree(node, small_model)
 
 		# Check if reached the max number of effective leaves before finetuning unnecessarily
@@ -223,8 +220,7 @@ def run_tree(trainset, trainset_eval, testset, device, configs):
 			model.decoders = decoders
 			model.depth = model.compute_depth()
 	_ = gc.collect()
-	torch.cuda.empty_cache()
-	################################# FULL MODEL FINETUNING #################################
+	torch.cuda.empty_cache()	################################# FULL MODEL FINETUNING #################################
 
 
 	print('\n*****************model depth %d******************\n' % (model.depth))
@@ -242,7 +238,7 @@ def run_tree(trainset, trainset_eval, testset, device, configs):
 		lr_scheduler.step()
 		alpha_scheduler.on_epoch_end(epoch)
 		_ = gc.collect()
-		torch.cuda.empty_cache()
-	return model
+		torch.cuda.empty_cache()	
+		return model
 
 

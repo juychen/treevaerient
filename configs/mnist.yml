@@ -35,5 +35,5 @@ globals:
   wandb_logging: 'disabled' # Whether to log to wandb [online, offline, disabled]
   eager_mode: True # Whether to run in eager or graph mode
   seed: 42 # Random seed
-  save_model: False # Whether to save the model. Set to True for inspecting models in notebook
+  save_model: True # Whether to save the model. Set to True for inspecting models in notebook
   config_name: 'mnist' 

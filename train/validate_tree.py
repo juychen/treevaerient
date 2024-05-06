@@ -65,9 +65,11 @@ def val_tree(trainset, testset, model, device, experiment_path, configs):
     metrics_calc_test = Custom_Metrics(device)
     validate_one_epoch(gen_test, model, metrics_calc_test, 0, device, test=True)
     _ = gc.collect()
+    torch.cuda.empty_cache()
     # predict the leaf probabilities and the leaves
     node_leaves_test, prob_leaves_test = predict(gen_test, model, device, 'node_leaves', 'prob_leaves')
     _ = gc.collect()
+    torch.cuda.empty_cache()
     # compute the predicted cluster
     y_test_pred = np.squeeze(np.argmax(prob_leaves_test, axis=-1)).numpy()
     # Calculate clustering metrics
@@ -102,6 +104,10 @@ def val_tree(trainset, testset, model, device, experiment_path, configs):
             np.save(save_file, data_tree)
         with open(experiment_path / 'config.yaml', 'w', encoding='utf8') as outfile:
             yaml.dump(configs, outfile, default_flow_style=False, allow_unicode=True)
+    # with open('data_tree.npy', 'wb') as save_file:
+    #     np.save(save_file, data_tree)
+    # with open('config.yaml', 'w', encoding='utf8') as outfile:
+    #     yaml.dump(configs, outfile, default_flow_style=False, allow_unicode=True)
 
     table = wandb.Table(columns=["node_id", "node_name", "parent", "size"], data=data_tree)
     fields = {"node_name": "node_name", "node_id": "node_id", "parent": "parent", "size": "size"}

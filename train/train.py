@@ -53,8 +53,8 @@ def run_experiment(configs):
 	else:# (len(available_gpus) < int(config["gpus"])) or not(int(config["cuda_device"]) in available_gpus):
 		os.environ['CUDA_VISIBLE_DEVICES'] = str(available_gpus[0])
 		print(f"No enough GPUs, using 1 GPU {available_gpus[0]}.")
-
-
+	
+	#device = torch.device("cpu")
 	# Set paths
 	project_dir = Path(__file__).absolute().parent
 	timestr = time.strftime("%Y%m%d-%H%M%S")
@@ -95,7 +95,9 @@ def run_experiment(configs):
 	# Save model
 	if configs['globals']['save_model']:
 		print("\nSaving weights at ", experiment_path)
-		torch.save(model.state_dict(), experiment_path / 'model_weights.pt')
+		torch.save(model.state_dict(), experiment_path +'/model_weights.pt')
+	
+	# torch.save(model.state_dict(), 'model_weights.pt')
 
 	# Evaluation of TreeVAE
 	print("\n" * 2)

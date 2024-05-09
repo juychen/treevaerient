@@ -302,7 +302,12 @@ def get_data(configs):
 		set(df_cell_label["true_label"].values)
 		matrix_ad_dp = matrix_ad/matrix_dp
 		matrix_ad_dp = matrix_ad_dp.T
-		matrix_ad_dp[np.isnan(matrix_ad_dp)] = 0
+
+		AF_mean = np.nanmean(matrix_ad_dp, 0)
+		matrix_ad_dp[np.isnan(matrix_ad_dp)] = np.outer(np.ones(matrix_ad_dp.shape[0]), AF_mean)[np.isnan(matrix_ad_dp)]
+
+
+		#matrix_ad_dp[np.isnan(matrix_ad_dp)] = 0
 		from sklearn.preprocessing import StandardScaler
 		from sklearn.preprocessing import Normalizer
 		scaler = Normalizer()

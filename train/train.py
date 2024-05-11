@@ -54,7 +54,7 @@ def run_experiment(configs):
 		os.environ['CUDA_VISIBLE_DEVICES'] = str(available_gpus[0])
 		print(f"No enough GPUs, using 1 GPU {available_gpus[0]}.")
 	
-	#device = torch.device("cpu")
+	device = torch.device("cpu")
 	# Set paths
 	project_dir = Path(__file__).absolute().parent
 	timestr = time.strftime("%Y%m%d-%H%M%S")

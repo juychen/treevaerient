@@ -305,15 +305,18 @@ def get_data(configs):
 
 		AF_mean = np.nanmean(matrix_ad_dp, 0)
 		matrix_ad_dp[np.isnan(matrix_ad_dp)] = np.outer(np.ones(matrix_ad_dp.shape[0]), AF_mean)[np.isnan(matrix_ad_dp)]
+		
 
 
 		#matrix_ad_dp[np.isnan(matrix_ad_dp)] = 0
 		from sklearn.preprocessing import StandardScaler
 		from sklearn.preprocessing import Normalizer
 		scaler = Normalizer()
-		matrix_ad_dp = scaler.fit_transform(matrix_ad_dp)
+		martx_af_dp = np.hstack((matrix_ad_dp,matrix_dp.T.todense()))
+
+		martx_af_dp = scaler.fit_transform(martx_af_dp)
 		from sklearn.model_selection import train_test_split
-		X_train, X_test, y_train, y_test = train_test_split(matrix_ad_dp, encoded_labels, test_size=0.2, random_state=configs['globals']['seed'])
+		X_train, X_test, y_train, y_test = train_test_split(martx_af_dp, encoded_labels, test_size=0.2, random_state=configs['globals']['seed'])
 		x_train = torch.from_numpy(X_train.astype(np.float32))
 		x_test = torch.from_numpy(X_test.astype(np.float32))
 		y_train = torch.from_numpy(y_train.astype(np.float32))

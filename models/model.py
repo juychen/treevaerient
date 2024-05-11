@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.distributions as td
 from utils.model_utils import construct_tree, compute_posterior
 from models.networks import get_encoder, get_decoder, MLP, Router, Dense
-from models.losses import loss_reconstruction_binary, loss_reconstruction_mse
+from models.losses import loss_reconstruction_binary, loss_reconstruction_mse,loss_reconstruction_afdpce
 from utils.model_utils import return_list_tree
 from utils.training_utils import calc_aug_loss
 
@@ -96,10 +96,12 @@ class TreeVAE(nn.Module):
         self.kwargs = kwargs
         
         self.activation = self.kwargs['activation']
-        if self.activation == "sigmoid":
+        if self.activation in ["sigmoid","afdpce"]:
             self.loss = loss_reconstruction_binary
         elif self.activation == "mse":
             self.loss = loss_reconstruction_mse
+        elif self.activation == "afdpce":
+            self.loss = loss_reconstruction_afdpce
         else:
             raise NotImplementedError
         # KL-annealing weight initialization
@@ -214,7 +216,11 @@ class TreeVAE(nn.Module):
         device = x.device
         
         # compute deterministic bottom up
-        d = x
+        if self.activation == "afdpce":
+            d = x[:, :x.shape[1] // 2]
+
+        else:
+            d = x[:, :x.shape[1] // 2]
         encoders = []
         emb_contr = []
 

@@ -65,7 +65,7 @@ class SmallTreeVAE(nn.Module):
         self.kwargs = kwargs
         
         self.activation = self.kwargs['activation']
-        if self.activation == "sigmoid":
+        if self.activation in ["sigmoid","afdpce"]:
             self.loss = loss_reconstruction_binary
         elif self.activation == "mse":
             self.loss = loss_reconstruction_mse
@@ -77,10 +77,16 @@ class SmallTreeVAE(nn.Module):
         encoded_sizes = self.kwargs['latent_dim']
         hidden_layers = self.kwargs['mlp_layers']
         self.depth = depth
-        encoded_size_gen = encoded_sizes[-(self.depth+1):-(self.depth-1)]  # e.g. encoded_size_gen = 32,16, depth 2
-        self.encoded_size = encoded_size_gen[::-1]  # self.encoded_size = 32,16 => 16,32
-        layers_gen = hidden_layers[-(self.depth+1):-(self.depth-1)]  # e.g. encoded_sizes 256,128,64, depth 2
-        self.hidden_layer = layers_gen[::-1]  # encoded_size_gen = 256,128 => 128,256
+        if(depth>=len(encoded_sizes)):
+            encoded_size_gen = encoded_sizes[-2:]  # e.g. encoded_size_gen = 32,16, depth 2
+            self.encoded_size = encoded_size_gen[::-1]  # self.encoded_size = 32,16 => 16,32
+            layers_gen = hidden_layers[-2:]  # e.g. encoded_sizes 256,128,64, depth 2
+            self.hidden_layer = layers_gen[::-1]  # encoded_size_gen = 256,128 => 128,256
+        else:
+            encoded_size_gen = encoded_sizes[-(self.depth+1):-(self.depth-1)]  # e.g. encoded_size_gen = 32,16, depth 2
+            self.encoded_size = encoded_size_gen[::-1]  # self.encoded_size = 32,16 => 16,32
+            layers_gen = hidden_layers[-(self.depth+1):-(self.depth-1)]  # e.g. encoded_sizes 256,128,64, depth 2
+            self.hidden_layer = layers_gen[::-1]  # encoded_size_gen = 256,128 => 128,256
 
         self.inp_shape = self.kwargs['inp_shape']
         self.augment = self.kwargs['augment']

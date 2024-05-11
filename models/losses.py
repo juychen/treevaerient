@@ -3,14 +3,14 @@ Loss functions for the reconstruction term of the ELBO.
 """
 import torch
 import torch.nn.functional as F
-
+import numpy as np
 
 def loss_reconstruction_binary(x, x_decoded_mean, weights):
     x = torch.flatten(x, start_dim=1)
     x_decoded_mean = [torch.flatten(decoded_leaf, start_dim=1) for decoded_leaf in x_decoded_mean]
     loss = torch.sum(
         torch.stack([weights[i] *
-                        F.binary_cross_entropy(input = x_decoded_mean[i], target = x, reduction='none').sum(dim=-1)
+                        F.binary_cross_entropy(input = x_decoded_mean[i], target = x[:,:x.shape[1] // 2], reduction='none').sum(dim=-1)
                         for i in range(len(x_decoded_mean))], dim=-1), dim=-1)
     return loss
 
@@ -20,6 +20,17 @@ def loss_reconstruction_mse(x, x_decoded_mean, weights):
     loss = torch.sum(
         torch.stack([weights[i] *
                         F.mse_loss(input = x_decoded_mean[i], target = x, reduction='none').sum(dim=-1)
+                        for i in range(len(x_decoded_mean))], dim=-1), dim=-1)
+    return loss
+
+def loss_reconstruction_afdpce(x, x_decoded_mean, weights):
+    x = torch.flatten(x, start_dim=1)
+    cell_SNPread_filtered_batch = torch.count_nonzero(x[:, :x.shape[1] // 2:], dim=1)
+
+    x_decoded_mean = [torch.flatten(decoded_leaf, start_dim=1) for decoded_leaf in x_decoded_mean]
+    loss = torch.sum(
+        torch.stack([weights[i] *
+                        (F.binary_cross_entropy(input = x_decoded_mean[i], target = x[:,:x.shape[1] // 2], reduction='none')*x[:,:x.shape[1] // 2:]/(torch.sum(cell_SNPread_filtered_batch))).sum(dim=-1)
                         for i in range(len(x_decoded_mean))], dim=-1), dim=-1)
     return loss
 

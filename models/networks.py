@@ -65,7 +65,7 @@ class DecoderSmall(nn.Module):
         x = self.bn4(x)
         x = actvn(x)
         x = self.dense5(x)
-        if self.activation == "sigmoid":
+        if self.activation in ["sigmoid","afdpce"]:
             x = torch.sigmoid(x)
         return x
 
@@ -183,7 +183,7 @@ class DecoderOmniglot(nn.Module):
             x = self.bns[i](x)
             x = actvn(x)
         x = self.cnns[-1](x)
-        if self.activation == "sigmoid":
+        if self.activation in ["sigmoid","afdpce"]:
             x = torch.sigmoid(x)
         return x
 

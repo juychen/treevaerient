@@ -10,6 +10,7 @@ omniglot/*
 out/*
 plots/*
 omniglot_plot_ckpts/*
+results/*
 
 # C extensions
 *.so

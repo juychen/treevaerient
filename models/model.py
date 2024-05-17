@@ -96,7 +96,7 @@ class TreeVAE(nn.Module):
         self.kwargs = kwargs
         
         self.activation = self.kwargs['activation']
-        if self.activation in ["sigmoid","afdpce"]:
+        if self.activation == "sigmoid":
             self.loss = loss_reconstruction_binary
         elif self.activation == "mse":
             self.loss = loss_reconstruction_mse

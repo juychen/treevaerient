@@ -112,7 +112,8 @@ def get_node_embeddings(model, x):
     device = x.device
 
     # compute deterministic bottom up
-    d = x
+    d = x[:, :x.shape[1] // 2]
+    #d = x
     encoders = []
 
     for i in range(0, len(model.hidden_layers)):

@@ -314,7 +314,7 @@ def get_data(configs):
 		scaler = Normalizer()
 		martx_af_dp = np.hstack((matrix_ad_dp,matrix_dp.T.todense()))
 
-		martx_af_dp = scaler.fit_transform(martx_af_dp)
+		#martx_af_dp = scaler.fit_transform(martx_af_dp)
 		from sklearn.model_selection import train_test_split
 		X_train, X_test, y_train, y_test = train_test_split(martx_af_dp, encoded_labels, test_size=0.2, random_state=configs['globals']['seed'])
 		x_train = torch.from_numpy(X_train.astype(np.float32))

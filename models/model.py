@@ -216,11 +216,14 @@ class TreeVAE(nn.Module):
         device = x.device
         
         # compute deterministic bottom up
-        if self.activation == "afdpce":
-            d = x[:, :x.shape[1] // 2]
-
+        if ('input_data' in self.kwargs): 
+            if self.input_data == "varient":
+                d = x[:, :x.shape[1] // 2]
+            else:
+                d = x
         else:
-            d = x[:, :x.shape[1] // 2]
+            d = x
+            
         encoders = []
         emb_contr = []
 

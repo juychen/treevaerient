@@ -3,6 +3,7 @@ run_name: 'waldvarient' # name of the run
 data:
   data_name: 'waldvarient' # name of the dataset
   num_clusters_data: 2 # number of true clusters in the data (if known), this is used only for evaluation purposes
+  return_full_data: False # Whether to return the full dataset or only the training set
 
 training:
   num_epochs: 150 # number of epochs to train the initial tree
@@ -16,7 +17,7 @@ training:
   decay_stepsize: 100 # number of epochs after which learning rate decays
   decay_kl: 0.001 # KL-annealing weight increase per epoch (capped at 1)
   kl_start: 0.0 # KL-annealing weight initialization
-
+  input_data: 'varient' # name of the dataset
   inp_shape: 3972 # The total dimensions of the input data (if rgb images of 32x32 then 32x32x3)
   latent_dim: [32, 32, 32,32] # A list of latent dimensions for each depth of the tree from the bottom to the root, last value is the dimensionality of the root node
   mlp_layers: [128, 128, 128,128] # A list of hidden units number for the MLP transformations for each depth of the tree from bottom to root

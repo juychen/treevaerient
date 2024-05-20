@@ -277,18 +277,18 @@ def get_data(configs):
 
 	elif data_name == 'waldvarient':
 		import pandas as pd
-		import torch 
 		import numpy as np
 		from scipy.io import mmread		
 		from sklearn.preprocessing import LabelEncoder
+		from sklearn.preprocessing import StandardScaler
+		from sklearn.preprocessing import Normalizer
+
 		print("waldvarient")
 		matrix_dp = mmread('/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/passed_dp.mtx')
 		matrix_ad = mmread('/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/passed_ad.mtx')
 		# Read the cell label
-		matrix_dp.shape
 		df_cell_label = pd.read_csv('/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/cell_label.csv')
 		var_name = pd.read_csv('/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/passed_variant_names.txt',header=None)
-		var_name
 		label_encoder = LabelEncoder()
 		# Fit the label encoder on the labels
 		label_encoder.fit(df_cell_label["true_label"].values)
@@ -296,27 +296,19 @@ def get_data(configs):
 		encoded_labels = label_encoder.transform(df_cell_label["true_label"].values)
 
 		# Print the encoded labels
-
-		encoded_labels
-		df_cell_label.head()
-		set(df_cell_label["true_label"].values)
 		matrix_ad_dp = matrix_ad/matrix_dp
 		matrix_ad_dp = matrix_ad_dp.T
 
 		AF_mean = np.nanmean(matrix_ad_dp, 0)
 		matrix_ad_dp[np.isnan(matrix_ad_dp)] = np.outer(np.ones(matrix_ad_dp.shape[0]), AF_mean)[np.isnan(matrix_ad_dp)]
-		
-
-
-		#matrix_ad_dp[np.isnan(matrix_ad_dp)] = 0
-		from sklearn.preprocessing import StandardScaler
-		from sklearn.preprocessing import Normalizer
-		scaler = Normalizer()
 		martx_af_dp = np.hstack((matrix_ad_dp,matrix_dp.T.todense()))
-
+		#scaler = Normalizer()
 		#martx_af_dp = scaler.fit_transform(martx_af_dp)
-		from sklearn.model_selection import train_test_split
-		X_train, X_test, y_train, y_test = train_test_split(martx_af_dp, encoded_labels, test_size=0.2, random_state=configs['globals']['seed'])
+		if ('return_full_data' in configs['data']) and (configs['data']['return_full_data'] == True):
+			X_train, X_test, y_train, y_test = martx_af_dp, martx_af_dp, encoded_labels, encoded_labels
+		else:
+			from sklearn.model_selection import train_test_split
+			X_train, X_test, y_train, y_test = train_test_split(martx_af_dp, encoded_labels, test_size=0.2, random_state=configs['globals']['seed'])
 		x_train = torch.from_numpy(X_train.astype(np.float32))
 		x_test = torch.from_numpy(X_test.astype(np.float32))
 		y_train = torch.from_numpy(y_train.astype(np.float32))

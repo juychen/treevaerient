@@ -112,7 +112,14 @@ def get_node_embeddings(model, x):
     device = x.device
 
     # compute deterministic bottom up
-    d = x[:, :x.shape[1] // 2]
+    if ('input_data' in model.kwargs): 
+        if model.kwargs['input_data'] == "varient":
+            d = x[:, :x.shape[1] // 2]
+        else:
+            d = x
+    else:
+        d = x
+    #d = x[:, :x.shape[1] // 2]
     #d = x
     encoders = []
 

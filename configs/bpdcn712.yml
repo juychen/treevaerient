@@ -2,7 +2,6 @@ run_name: 'waldvarient' # name of the run
 
 data:
   data_name: 'waldvarient' # name of the dataset
-  #varient_path: '/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/' # path to the dataset
   varient_path: '/home/junyi/code/treevae/data/Variant/bpdcn712_assemble_trimmed_aligned_mt_addtag_cellSNP0_WaldVariant_paperCell/' # path to the dataset
   num_clusters_data: 2 # number of true clusters in the data (if known), this is used only for evaluation purposes
   return_full_data: False # Whether to return the full dataset or only the training set

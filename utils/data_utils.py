@@ -278,18 +278,28 @@ def get_data(configs):
 	elif data_name == 'waldvarient':
 		import pandas as pd
 		import numpy as np
+		import pickle
 		from scipy.io import mmread		
 		from sklearn.preprocessing import LabelEncoder
 		from sklearn.preprocessing import StandardScaler
 		from sklearn.preprocessing import Normalizer
 
 		print("waldvarient")
-		matrix_dp = mmread('/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/passed_dp.mtx')
-		matrix_ad = mmread('/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/passed_ad.mtx')
+		if ('varient_path' in configs['data']):
+			data_path = configs['data']['varient_path']
+		else:
+			data_path = '/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/'
+
+		matrix_dp = mmread(data_path+'passed_dp.mtx')
+		matrix_ad = mmread(data_path+'passed_ad.mtx')
 		# Read the cell label
-		df_cell_label = pd.read_csv('/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/cell_label.csv')
-		var_name = pd.read_csv('/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/passed_variant_names.txt',header=None)
+		df_cell_label = pd.read_csv(data_path+'cell_label.csv')
+		var_name = pd.read_csv(data_path+'passed_variant_names.txt',header=None)
 		label_encoder = LabelEncoder()
+		output = open(data_path+'label_encoder.pkl', 'wb')
+		pickle.dump(label_encoder, output)
+		output.close()
+
 		# Fit the label encoder on the labels
 		label_encoder.fit(df_cell_label["true_label"].values)
 		# Transform the labels into encoded values

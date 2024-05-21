@@ -217,7 +217,7 @@ class TreeVAE(nn.Module):
         
         # compute deterministic bottom up
         if ('input_data' in self.kwargs): 
-            if self.input_data == "varient":
+            if self.kwargs['input_data'] == "varient":
                 d = x[:, :x.shape[1] // 2]
             else:
                 d = x

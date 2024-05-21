@@ -4,7 +4,7 @@ data:
   data_name: 'waldvarient' # name of the dataset
   #varient_path: '/home/junyi/code/treevae/data/Variant/trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell/' # path to the dataset
   varient_path: '/home/junyi/code/treevae/data/Variant/bpdcn712_assemble_trimmed_aligned_mt_addtag_cellSNP0_WaldVariant_paperCell/' # path to the dataset
-  num_clusters_data: 2 # number of true clusters in the data (if known), this is used only for evaluation purposes
+  num_clusters_data: 10 # number of true clusters in the data (if known), this is used only for evaluation purposes
   return_full_data: False # Whether to return the full dataset or only the training set
 
 training:
@@ -20,7 +20,8 @@ training:
   decay_kl: 0.001 # KL-annealing weight increase per epoch (capped at 1)
   kl_start: 0.0 # KL-annealing weight initialization
   input_data: 'varient' # name of the dataset
-  inp_shape: 3972 # The total dimensions of the input data (if rgb images of 32x32 then 32x32x3)
+  #inp_shape: 3972 # The total dimensions of the input data in the old sample (if rgb images of 32x32 then 32x32x3)
+  inp_shape: 7318 # The total dimensions of the input data (if rgb images of 32x32 then 32x32x3)
   latent_dim: [32, 32, 32,32] # A list of latent dimensions for each depth of the tree from the bottom to the root, last value is the dimensionality of the root node
   mlp_layers: [128, 128, 128,128] # A list of hidden units number for the MLP transformations for each depth of the tree from bottom to root
   initial_depth: 1 # The initial depth of the tree (root has depth 0 and a root with two leaves has depth 1)
@@ -28,7 +29,7 @@ training:
   encoder: 'mlp' # Type of encoder/decoder used
   grow: True # Whether to grow the tree
   prune: True # Whether to prune the tree of empty leaves
-  num_clusters_tree: 8 # The maximum number of leaves of the final tree
+  num_clusters_tree: 10 # The maximum number of leaves of the final tree
   compute_ll: False # Whether to compute the log-likelihood estimation at the end of the training (it might take some time)
   augment: False # Whether to use contrastive learning through augmentation
   augmentation_method: 'simple' # The type of augmentation method used if augment is True

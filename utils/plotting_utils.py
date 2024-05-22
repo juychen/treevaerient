@@ -6,6 +6,7 @@ from utils.model_utils import construct_tree, compute_posterior
 import re
 import networkx as nx
 from sklearn.decomposition import PCA
+import umap
 
 
 
@@ -196,10 +197,15 @@ def draw_scatter_node(node_id, node_embeddings, colors, ax, pca = True):
     z_sample = node_embeddings[node_id]['z_sample']
     weights = node_embeddings[node_id]['prob']
 
-    if pca:
+    if str(pca)=='UMAP':
+        # pca_fit = PCA(n_components=15)
+        # z_sample = pca_fit.fit_transform(z_sample)
+        reducer = umap.UMAP(n_components=2)
+        z_sample = reducer.fit_transform(z_sample)
+
+    elif pca ==True:
         pca_fit = PCA(n_components=2)
         z_sample = pca_fit.fit_transform(z_sample)
-
 
     ax.scatter(z_sample[:, 0], z_sample[:, 1], c=colors, cmap='tab10', alpha=weights, s = 0.25)
     ax.set_title(f"Node {node_id}")

@@ -275,7 +275,7 @@ def get_data(configs):
 		trainset_eval.dataset.targets = torch.zeros(trainset.dataset.attr.shape[0], dtype=torch.int8)
 		testset.dataset.targets = torch.zeros(trainset.dataset.attr.shape[0], dtype=torch.int8)
 
-	elif data_name == 'waldvarient':
+	elif data_name in ['waldvarient','bpdcn712Wald','bpdcn712LRT']:
 		import pandas as pd
 		import numpy as np
 		import pickle

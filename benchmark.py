@@ -45,7 +45,7 @@ from utils.plotting_utils import plot_tree_graph, get_node_embeddings, draw_tree
 
 # %%
 path = 'models/experiments/'
-ex_path = 'waldvarient/20240509-143834_69291' # INSERT YOUR PATH HERE
+ex_path = 'waldvarient/20240520-165201_0bf0e' # INSERT YOUR PATH HERE
 checkpoint_path = path+ex_path
 with open(checkpoint_path + "/config.yaml", 'r') as stream:
     configs = yaml.load(stream,Loader=yaml.Loader)

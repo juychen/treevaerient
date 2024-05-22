@@ -52,7 +52,7 @@ def main():
 
     # Specify config name
     parser.add_argument('--config_name', default='mnist', type=str,
-                        choices=['mnist', 'fmnist', 'news20', 'omniglot', 'cifar10', 'cifar100', 'celeba','waldvarient'],
+                        choices=['mnist', 'fmnist', 'news20', 'omniglot', 'cifar10', 'cifar100', 'celeba','waldvarient','bpdcn712LRT','bpdcn712Wald'],
                         help='the override file name for config.yml')
 
     args = parser.parse_args()

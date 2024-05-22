@@ -32,6 +32,11 @@ def loss_reconstruction_afdpce(x, x_decoded_mean, weights):
         torch.stack([weights[i] *
                         (F.binary_cross_entropy(input = x_decoded_mean[i], target = x[:,:x.shape[1] // 2], reduction='none')*x[:,x.shape[1] // 2:]/(torch.sum(cell_SNPread_filtered_batch))).sum(dim=-1)
                         for i in range(len(x_decoded_mean))], dim=-1), dim=-1)
+    # loss = torch.sum(
+    #     torch.stack([weights[i] *
+    #                     (F.binary_cross_entropy(input = x_decoded_mean[i], target = x[:,:x.shape[1] // 2], reduction='none')*x[:,x.shape[1] // 2:]).sum(dim=-1)
+    #                     for i in range(len(x_decoded_mean))], dim=-1), dim=-1)
+
     return loss
 
 def loss_reconstruction_cov_mse_eval(x, x_decoded_mean, weights):

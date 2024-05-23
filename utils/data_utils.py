@@ -297,13 +297,13 @@ def get_data(configs):
 		var_name = pd.read_csv(data_path+'passed_variant_names.txt',header=None)
 		label_encoder = LabelEncoder()
 		output = open(data_path+'label_encoder.pkl', 'wb')
-		pickle.dump(label_encoder, output)
-		output.close()
 
 		# Fit the label encoder on the labels
 		label_encoder.fit(df_cell_label["true_label"].values)
 		# Transform the labels into encoded values
 		encoded_labels = label_encoder.transform(df_cell_label["true_label"].values)
+		pickle.dump(label_encoder, output)
+		output.close()
 
 		# Print the encoded labels
 		matrix_ad_dp = matrix_ad/matrix_dp

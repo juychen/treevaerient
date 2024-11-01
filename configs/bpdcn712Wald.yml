@@ -24,10 +24,10 @@ training:
   #inp_shape: 3972 # The total dimensions of the input data in the old sample (if rgb images of 32x32 then 32x32x3) trimmed_starsolo_chrM_cellSNP0_WaldVariant_paperCell
   inp_shape: 7318 # The total dimensions of the input data (if rgb images of 32x32 then 32x32x3) bpdcn712_assemble_trimmed_aligned_mt_addtag_cellSNP0_WaldVariant_paperCell
   #inp_shape: 2740 # For LRT bpdcn712_assemble_trimmed_aligned_mt_addtag_cellSNP0_LRTVariant_paperCell
-  latent_dim: [32, 32, 32] # A list of latent dimensions for each depth of the tree from the bottom to the root, last value is the dimensionality of the root node
-  mlp_layers: [128, 128, 128] # A list of hidden units number for the MLP transformations for each depth of the tree from bottom to root
+  latent_dim: [128, 128, 128] # A list of latent dimensions for each depth of the tree from the bottom to the root, last value is the dimensionality of the root node
+  mlp_layers: [256, 256, 256] # A list of hidden units number for the MLP transformations for each depth of the tree from bottom to root
   initial_depth: 1 # The initial depth of the tree (root has depth 0 and a root with two leaves has depth 1)
-  activation: "sigmoid" # The name of the activation function for the reconstruction loss [sigmoid, mse,afdpce]
+  activation: "afdpce" # The name of the activation function for the reconstruction loss [sigmoid, mse,afdpce]
   encoder: 'mlp' # Type of encoder/decoder used
   grow: True # Whether to grow the tree
   prune: True # Whether to prune the tree of empty leaves
